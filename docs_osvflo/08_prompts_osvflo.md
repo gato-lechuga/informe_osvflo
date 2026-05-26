@@ -17,4 +17,9 @@ Quiero estructurar esta información de la siguiente forma, el contenido va a es
 - Tratamiento de datos según la ley 19.628: tipos, distinción personales/sensibles y derechos ARCO.
 - Recomendaciones de seguridad y reflexión nacional del análisis.
 
-Debe estar correctamente estructurado para luego integrarse con una aplicación en React
+Debe estar correctamente estructurado para luego integrarse con una aplicación en React 
+
+# Comportamiento de botones 
+Agrega funcionalidad a los botones Inicio, análisis y recursos, cada uno tiene que llevar a su seccion al ser oprimido.
+
+Agrega funcionalidad a los botones "explorar analisis" y "documentacion completa", el botón de documentación debe redirigir a la documentación de github.
