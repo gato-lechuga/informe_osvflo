@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Shield,
   Lock,
@@ -19,6 +19,15 @@ import {
 function App() {
   const [expandedSection, setExpandedSection] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  const heroRef = useRef(null);
+  const analysisRef = useRef(null);
+  const conclusionsRef = useRef(null);
+  
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
+  };
 
   const sections = [
     {
@@ -64,6 +73,21 @@ function App() {
         'Art. 3: Interceptación ilícita de datos',
         'Art. 7-8: Fraude y receptación informática',
         'Mapeo jurídico de conductas delictivas',
+      ],
+    },
+    {
+      id: 'tabla_regulaciones',
+      title: 'Tabla Comparativa',
+      subtitle: 'Marcos Regulatorios',
+      icon: Scale,
+      color: 'from-cyan-600 to-teal-600',
+      content: `Análisis comparativo de los principales marcos regulatorios que aplican al caso Equifax, mostrando las diferencias en protección de datos, tipificación de delitos informáticos y sanciones aplicables.`,
+      isTable: true,
+      tableData: [
+        { marco: 'Ley 19.628', pais: 'Chile', enfoque: 'Protección de Datos', proteccion: 'Principios de seguridad y confidencialidad', delitos: 'Acceso y uso ilícito', sanciones: 'Multas hasta 1.000 UF' },
+        { marco: 'Ley 21.459', pais: 'Chile', enfoque: 'Delitos Informáticos', proteccion: 'Seguridad de sistemas', delitos: 'Acceso, interceptación, obstaculización', sanciones: 'Cárcel 61 días a 5 años' },
+        { marco: 'GDPR', pais: 'Unión Europea', enfoque: 'Protección de Datos', proteccion: 'Derechos y privacidad integral', delitos: 'Procesamiento ilegal de datos', sanciones: 'Multas hasta €20M o 4% ingresos' },
+        { marco: 'Convenio Budapest', pais: 'Internacional', enfoque: 'Ciberdelincuencia', proteccion: 'Armonización penal', delitos: 'Acceso, interferencia, abuso de dispositivos', sanciones: 'Según legislación nacional' },
       ],
     },
     {
@@ -165,20 +189,20 @@ function App() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex gap-8">
-              <button className="text-sm hover:text-purple-300 transition">Inicio</button>
-              <button className="text-sm hover:text-purple-300 transition">Análisis</button>
-              <button className="text-sm hover:text-purple-300 transition">Recursos</button>
+              <button onClick={() => scrollToSection(heroRef)} className="text-sm hover:text-purple-300 transition">Inicio</button>
+              <button onClick={() => scrollToSection(analysisRef)} className="text-sm hover:text-purple-300 transition">Análisis</button>
+              <button onClick={() => scrollToSection(conclusionsRef)} className="text-sm hover:text-purple-300 transition">Recursos</button>
             </nav>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+      <section ref={heroRef} className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/50 mb-6">
             <Zap className="w-4 h-4 text-purple-300" />
-            <span className="text-sm text-purple-200">Caso de Estudio 2017</span>
+            <span className="text-sm text-purple-200">Ciberataque Equifax 2017</span>
           </div>
 
           <h2 className="text-5xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-200 via-blue-200 to-cyan-200 bg-clip-text text-transparent">
@@ -191,13 +215,16 @@ function App() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => setExpandedSection('resumen')}
+              onClick={() => scrollToSection(analysisRef)}
               className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 transition font-semibold flex items-center justify-center gap-2"
             >
               <BookOpen className="w-5 h-5" />
               Explorar Análisis
             </button>
-            <button className="px-8 py-3 rounded-lg border border-white/20 hover:border-white/40 hover:bg-white/5 transition font-semibold">
+            <button
+              onClick={() => window.open('https://github.com/gato-lechuga/informe_osvflo/tree/main/docs_osvflo', '_blank')}
+              className="px-8 py-3 rounded-lg border border-white/20 hover:border-white/40 hover:bg-white/5 transition font-semibold"
+            >
               Documentación Completa
             </button>
           </div>
@@ -224,7 +251,7 @@ function App() {
       </section>
 
       {/* Main Content */}
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8">
+      <section ref={analysisRef} className="relative py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-12">
             <div className="h-1 w-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
@@ -276,19 +303,49 @@ function App() {
                       <div className="border-t border-white/10 px-6 py-6 bg-white/[0.02]">
                         <p className="text-slate-300 mb-6 leading-relaxed">{section.content}</p>
 
-                        <div className="space-y-3">
-                          <p className="text-sm font-semibold text-purple-300 uppercase tracking-wider">
-                            Puntos Clave
-                          </p>
-                          {section.details.map((detail, idx) => (
-                            <div key={idx} className="flex items-start gap-3">
-                              <ArrowRight className="w-4 h-4 text-purple-500 mt-1 shrink-0" />
-                              <p className="text-slate-300 text-sm">{detail}</p>
-                            </div>
-                          ))}
-                        </div>
+                        {section.isTable ? (
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="border-b border-white/20">
+                                  <th className="text-left py-3 px-4 font-semibold text-purple-300">Marco Regulatorio</th>
+                                  <th className="text-left py-3 px-4 font-semibold text-purple-300">País/Región</th>
+                                  <th className="text-left py-3 px-4 font-semibold text-purple-300">Protección de Datos</th>
+                                  <th className="text-left py-3 px-4 font-semibold text-purple-300">Delitos Informáticos</th>
+                                  <th className="text-left py-3 px-4 font-semibold text-purple-300">Sanciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {section.tableData.map((row, idx) => (
+                                  <tr key={idx} className="border-b border-white/10 hover:bg-white/5 transition">
+                                    <td className="py-4 px-4 font-semibold text-cyan-300">{row.marco}</td>
+                                    <td className="py-4 px-4 text-slate-300">{row.pais}</td>
+                                    <td className="py-4 px-4 text-slate-400">{row.proteccion}</td>
+                                    <td className="py-4 px-4 text-slate-400">{row.delitos}</td>
+                                    <td className="py-4 px-4 text-slate-400">{row.sanciones}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            <p className="text-sm font-semibold text-purple-300 uppercase tracking-wider">
+                              Puntos Clave
+                            </p>
+                            {section.details.map((detail, idx) => (
+                              <div key={idx} className="flex items-start gap-3">
+                                <ArrowRight className="w-4 h-4 text-purple-500 mt-1 shrink-0" />
+                                <p className="text-slate-300 text-sm">{detail}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
 
-                        <button className="mt-6 px-4 py-2 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/30 text-purple-200 text-sm font-semibold transition flex items-center gap-2">
+                        <button
+                          onClick={() => window.open('https://github.com/gato-lechuga/informe_osvflo/tree/main/docs_osvflo', '_blank')}
+                          className="mt-6 px-4 py-2 rounded-lg bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/30 text-purple-200 text-sm font-semibold transition flex items-center gap-2"
+                        >
                           <Lock className="w-4 h-4" />
                           Ver Documentación Completa
                         </button>
@@ -303,7 +360,7 @@ function App() {
       </section>
 
       {/* Key Insights */}
-      <section className="relative py-12 px-4 sm:px-6 lg:px-8">
+      <section ref={conclusionsRef} className="relative py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-12">
             <div className="h-1 w-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
@@ -364,52 +421,18 @@ function App() {
             <div>
               <p className="font-semibold mb-4">Navegación</p>
               <ul className="space-y-2 text-sm text-slate-400 hover:text-slate-300 transition">
-                <li><button>Inicio</button></li>
-                <li><button>Análisis</button></li>
-                <li><button>Recursos</button></li>
+                <li><button onClick={() => scrollToSection(heroRef)}>Inicio</button></li>
+                <li><button onClick={() => scrollToSection(analysisRef)}>Análisis</button></li>
+                <li><button onClick={() => scrollToSection(conclusionsRef)}>Recursos</button></li>
               </ul>
             </div>
-            <div>
-              <p className="font-semibold mb-4">Documentos</p>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><button className="hover:text-slate-300 transition">Resumen</button></li>
-                <li><button className="hover:text-slate-300 transition">Marco Legal</button></li>
-                <li><button className="hover:text-slate-300 transition">Análisis</button></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold mb-4">Recursos</p>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><button className="hover:text-slate-300 transition">Documentación</button></li>
-                <li><button className="hover:text-slate-300 transition">Referencias</button></li>
-                <li><button className="hover:text-slate-300 transition">Contacto</button></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold mb-4">Legal</p>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><button className="hover:text-slate-300 transition">Privacidad</button></li>
-                <li><button className="hover:text-slate-300 transition">Términos</button></li>
-                <li><button className="hover:text-slate-300 transition">Compliance</button></li>
-              </ul>
-            </div>
+          
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center">
             <p className="text-slate-400 text-sm">
-              © 2024 Análisis Integral Equifax. Todos los derechos reservados.
+              © 2026 Análisis Integral Equifax. Todos los derechos reservados.
             </p>
-            <div className="flex gap-4 mt-4 sm:mt-0">
-              <button className="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition flex items-center justify-center">
-                <Shield className="w-5 h-5" />
-              </button>
-              <button className="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition flex items-center justify-center">
-                <Lock className="w-5 h-5" />
-              </button>
-              <button className="w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition flex items-center justify-center">
-                <Zap className="w-5 h-5" />
-              </button>
-            </div>
           </div>
         </div>
       </footer>

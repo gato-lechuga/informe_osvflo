@@ -108,7 +108,7 @@ Las conductas observadas en el ataque permiten analizar tipos penales como:
 Del mismo modo, el tratamiento negligente de los datos personales por parte de Equifax permite evaluar responsabilidades asociadas al deber de seguridad y custodia de información sensible.
 
 ---
-## Conclusión Ejecutiva
+## Conclusión 
 
 La brecha de seguridad sufrida por Equifax representa uno de los incidentes más significativos en la historia moderna de la ciberseguridad y protección de datos personales. La combinación entre negligencia corporativa, vulnerabilidades técnicas no mitigadas y exposición masiva de información sensible convirtió el caso en un referente internacional sobre responsabilidad empresarial en entornos digitales.
 
